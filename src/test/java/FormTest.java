@@ -42,6 +42,17 @@ public class FormTest {
     }
 
     @Test
+    void shouldValidationNameTestFormHyphen() { //ввод имени через дефис
+        open("http://localhost:9999");
+        SelenideElement form = $(".form_theme_alfa-on-white");
+        form.$("[data-test-id=name] input").setValue("Анна-Мария Иванова");
+        form.$("[data-test-id=phone] input").setValue("+79944232365");
+        form.$("[data-test-id=agreement]").click();
+        form.$(".button").click();
+        $("[data-test-id=order-success]").shouldHave(exactText("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время."));
+    }
+
+    @Test
     void shouldValidationNameNumbersTestForm() { // ввод цифр в поле имя
         open("http://localhost:9999");
         SelenideElement form = $(".form_theme_alfa-on-white");
