@@ -7,7 +7,6 @@ import static com.codeborne.selenide.Selenide.$;
 import static com.codeborne.selenide.Selenide.open;
 
 public class FormTest {
-
     @Test
     void shouldTestForm() { //успешная отправка данных
         open("http://localhost:9999");
@@ -17,6 +16,18 @@ public class FormTest {
         form.$("[data-test-id=agreement]").click();
         form.$(".button").click();
         $("[data-test-id=order-success]").shouldHave(exactText("Ваша заявка успешно отправлена! Наш менеджер свяжется с вами в ближайшее время."));
+    }
+    @Test
+    void shouldTestFormNoCheckBox() { //отправка формы без чек-бокса
+        open("http://localhost:9999");
+        SelenideElement form = $(".form_theme_alfa-on-white");
+        form.$("[data-test-id=name] input").setValue("Смирнова Виктория");
+        form.$("[data-test-id=phone] input").setValue("+79944232365");
+        form.$(".button").click();
+        String expectedColor = "rgba(255, 92, 92, 1)";
+        String textColor = $("[data-test-id=agreement].input_invalid").getCssValue("color");
+        $("[data-test-id=agreement].input_invalid").shouldHave(Condition.cssValue("color", expectedColor));
+        form.$("[data-test-id=agreement].input_invalid").shouldHave(exactText("Я соглашаюсь с условиями обработки и использования моих персональных данных и разрешаю сделать запрос в бюро кредитных историй"));
     }
 
     @Test
@@ -101,7 +112,7 @@ public class FormTest {
         open("http://localhost:9999");
         SelenideElement form = $(".form_theme_alfa-on-white");
         form.$("[data-test-id=name] input").setValue("Смирнова Виктория");
-        form.$("[data-test-id=phone] input").setValue("Виктория");
+        form.$("[data-test-id=phone] input").setValue("$#$$#$");
         form.$("[data-test-id=agreement]").click();
         form.$(".button").click();
         $("[data-test-id=phone].input_invalid .input__sub").shouldHave(exactText("Телефон указан неверно. Должно быть 11 цифр, например, +79012345678."));
